@@ -1,5 +1,5 @@
 name: nextcloud
 description: Private file sync and share server
-version: 0.0.1
+version: 0.0.2
 category: File Synchronisation
 projectURL: https://github.com/jamesandariese/rancher-catalog
