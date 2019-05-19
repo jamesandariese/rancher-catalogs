@@ -1,0 +1,82 @@
+version: '2'
+services:
+  db:
+    image: mariadb
+    environment:
+      MYSQL_DATABASE: nextcloud
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: nextcloud
+    volumes:
+    - ${DATA_PATH}/db:/var/lib/mysql
+    command:
+    - --transaction-isolation=READ-COMMITTED
+    - --binlog-format=ROW
+  nextcloud:
+    image: jamesandariese/nextcloud-rancher-nextcloud-fpm 
+    stdin_open: true
+    tty: true
+    environment:
+      MYSQL_DATABASE: nextcloud
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_HOSTNAME: db
+      MYSQL_USER: nextcloud
+    volumes_from:
+    - volume-php
+    - volume-data
+    - volume-config
+    links:
+    - db:db
+    labels:
+      io.rancher.container.pull_image: always
+  nginx:
+    image: jamesandariese/nextcloud-rancher-nginx
+    stdin_open: true
+    tty: true
+    volumes_from:
+    - volume-php
+    labels:
+      io.rancher.container.pull_image: always
+      io.rancher.sidekicks: volume-data,volume-config,volume-php,nextcloud
+      nextcloud-nginx: 
+  volume-php:
+    image: busybox
+    stdin_open: true
+    volumes:
+    - /var/www/html
+    tty: true
+    command:
+    - /bin/true
+    labels:
+      io.rancher.container.pull_image: always
+      io.rancher.container.start_once: 'true'
+  volume-data:
+    image: busybox
+    stdin_open: true
+    volumes:
+    - ${DATA_PATH}/data:/var/www/html/data
+    tty: true
+    command:
+    - /bin/true
+    labels:
+      io.rancher.container.pull_image: always
+      io.rancher.container.start_once: 'true'
+  volume-config:
+    image: busybox
+    stdin_open: true
+    volumes:
+    - ${DATA_PATH}/config:/var/www/html/config
+    tty: true
+    command:
+    - /bin/true
+    labels:
+      io.rancher.container.pull_image: always
+      io.rancher.container.start_once: 'true'
+  load-balancer:
+    image: rancher/lb-service-haproxy:v0.9.11
+    ports:
+    - ${HOST_PORT}:${HOST_PORT}/tcp
+    labels:
+      io.rancher.container.agent.role: environmentAdmin,agent
+      io.rancher.container.agent_service.drain_provider: 'true'
+      io.rancher.container.create_agent: 'true'

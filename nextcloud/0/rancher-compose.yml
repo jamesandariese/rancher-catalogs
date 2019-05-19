@@ -1,0 +1,35 @@
+version: '2'
+services:
+  nextcloud:
+    scale: 1
+    start_on_create: true
+  nginx:
+    scale: 1
+    start_on_create: true
+  volume-php:
+    scale: 1
+    start_on_create: true
+  volume-data:
+    scale: 1
+    start_on_create: true
+  volume-config:
+    scale: 1
+    start_on_create: true
+catalog:
+  name: nextcloud
+  version: 0.0.1
+  description: Private file sync and share server
+  questions:
+    - variable: HOST_PORT
+      label: Port
+      default: 80
+      required: true
+      type: int
+    - variable: DB_PASSWORD
+      label: MySQL password
+      required: true
+      type: password
+    - variable: DATA_PATH
+      label: Data path on host
+      required: true
+      type: string
