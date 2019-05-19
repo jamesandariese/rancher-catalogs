@@ -19,7 +19,7 @@ services:
     environment:
       MYSQL_DATABASE: nextcloud
       MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_HOSTNAME: db
+      MYSQL_HOST: db
       MYSQL_USER: nextcloud
     volumes_from:
     - volume-php
