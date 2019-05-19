@@ -21,11 +21,24 @@ the first start.  In particular, you will want to configure the following:
   ),
   /* 'overwriteprotocol' => 'https', */
   'overwritehost' => 'nextcloud.mydomain.tld',
-  'trusted_proxies' => array('10.0.0.0/8'),
+  'trusted_proxies' => array('10.42.0.0/16'),
   'forwarded_for_headers' => array('HTTP_X_FORWARDED_FOR'),
 ```
 
 This will allow nextcloud to log IPs properly and provide working links and redirects.
+
+### Distributed Filesystem
+
+The data directory format was designed using GlusterFS.  Any distributed filesystem following POSIX
+sematics will work but it must be distributed to all hosts where the db and app are scheduled.
+
+Alternatively, this may be configured to run on a single host utilizing scheduling rules.  You may configure the scheduling rules after the stack is launched in the UI.
+
+### Load Balancer
+
+This is configured with a sample load balancer and no port forwards into the nginx container.  This is because the nginx container will allow a large range of IPs to override the requestor IP which the load balancer takes care of.
+
+You may place a secondary load balancer in front of the container
 
 ## License
 
