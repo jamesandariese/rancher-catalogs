@@ -27,7 +27,7 @@ services:
       - priority: 1
         protocol: http
         service: nginx
-        source_port: 80
+        source_port: ${HOST_PORT}
         target_port: 80
     health_check:
       response_timeout: 2000
@@ -39,7 +39,7 @@ services:
       reinitializing_timeout: 60000
 catalog:
   name: nextcloud
-  version: 0.0.2
+  version: 0.0.1
   description: Private file sync and share server
   questions:
     - variable: HOST_PORT
