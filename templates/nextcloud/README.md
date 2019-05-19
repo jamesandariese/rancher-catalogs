@@ -34,12 +34,6 @@ sematics will work but it must be distributed to all hosts where the db and app 
 
 Alternatively, this may be configured to run on a single host utilizing scheduling rules.  You may configure the scheduling rules after the stack is launched in the UI.
 
-### Load Balancer
-
-This is configured with a sample load balancer and no port forwards into the nginx container.  This is because the nginx container will allow a large range of IPs to override the requestor IP which the load balancer takes care of.
-
-You may place a secondary load balancer in front of the container
-
 ## License
 
 Copyright (c) 2019 James Andariese
