@@ -35,6 +35,8 @@ services:
     tty: true
     volumes_from:
     - volume-php
+    ports:
+    - ${HOST_PORT}:80/tcp
     labels:
       io.rancher.container.pull_image: always
       io.rancher.sidekicks: volume-data,volume-config,volume-php,nextcloud
@@ -71,11 +73,3 @@ services:
     labels:
       io.rancher.container.pull_image: always
       io.rancher.container.start_once: 'true'
-  load-balancer:
-    image: rancher/lb-service-haproxy:v0.9.11
-    ports:
-    - ${HOST_PORT}:${HOST_PORT}/tcp
-    labels:
-      io.rancher.container.agent.role: environmentAdmin,agent
-      io.rancher.container.agent_service.drain_provider: 'true'
-      io.rancher.container.create_agent: 'true'
